@@ -1,0 +1,4 @@
+#+TITLE: Adventures in cavas
+
+Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to upskill myself in the HTML canvas tag.
+
