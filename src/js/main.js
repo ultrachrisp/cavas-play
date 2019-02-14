@@ -1,16 +1,13 @@
 // Boilderplate from: https://github.com/villedieumorgan/npm-es6-build-boilerplate/blob/master/package.json
 
-import anime from 'animejs';
+//import anime from 'animejs';
 
 const init = () => {
     window.ftue = globalObject();
     setCanvasSize();
-    logo();
     preRenderer();
-    setScene();
-    animateParticles();
-    // autoClick();
-    // check();
+
+    window.requestAnimationFrame(animateParticles);
     window.addEventListener('resize', setCanvasSize, false);
 };
 
@@ -29,6 +26,7 @@ const globalObject = () => {
     ftue.currentTime = 0;
 
     ftue.testCount = 0;
+    
     
     ftue.canvas = document.getElementById("ftue");
     ftue.canvas.style.position = 'absolute';
@@ -67,33 +65,6 @@ const globalObject = () => {
     return ftue;
 };
 
-const logo = () => {
-    const { ftue } = window,
-          // logoWidth = 320,
-          // logoHeight = 142,
-          // xOffset = 160,
-          // yOffset = 140;
-          logoWidth = 450,
-          logoHeight = 450,
-          xOffset = 225,
-          yOffset = 275;
-    
-    ftue.logo = document.createElement('canvas');
-    ftue.logo.width = window.innerWidth;
-    ftue.logo.height = window.innerHeight;
-    // ftue.logoContext = window.ftue.logo.getContext('2d');
-    // ftue.logo.svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 86.5 86.55"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:5px;}.cls-2{fill:#fff;fill-rule:evenodd;}</style><symbol id="logo" viewBox="0 0 86.5 86.55"><g><path class="cls-1" d="M54.85,8.2H78.1V31.45L54.85,54.7M8.3,31.45V8.2H31.6L54.85,31.45M31.6,54.7,54.85,78H78.1V54.7M31.6,78H8.3V54.7L31.6,31.45"/><path class="cls-2" d="M14.1,31.6a5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.79,5.79,0,0,1,0-8.2,5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7A5.6,5.6,0,0,1,14.1,31.6Z"/><path class="cls-1" d="M14.1,31.6a5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.79,5.79,0,0,1,0-8.2,5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7A5.6,5.6,0,0,1,14.1,31.6Z"/><path class="cls-2" d="M14.1,8.3a5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7A5.6,5.6,0,0,1,2.5,8.3,5.6,5.6,0,0,1,4.2,4.2,5.6,5.6,0,0,1,8.3,2.5a5.6,5.6,0,0,1,4.1,1.7A5.6,5.6,0,0,1,14.1,8.3Z"/><path class="cls-1" d="M14.1,8.3a5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7A5.6,5.6,0,0,1,2.5,8.3,5.6,5.6,0,0,1,4.2,4.2,5.6,5.6,0,0,1,8.3,2.5a5.6,5.6,0,0,1,4.1,1.7A5.6,5.6,0,0,1,14.1,8.3Z"/><path class="cls-2" d="M14.1,54.85A5.6,5.6,0,0,1,12.4,59a5.6,5.6,0,0,1-4.1,1.7A5.6,5.6,0,0,1,4.2,59a5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,4.2,50.8a5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7A5.53,5.53,0,0,1,14.1,54.85Z"/><path class="cls-1" d="M14.1,54.85A5.6,5.6,0,0,1,12.4,59a5.6,5.6,0,0,1-4.1,1.7A5.6,5.6,0,0,1,4.2,59a5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,4.2,50.8a5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7A5.53,5.53,0,0,1,14.1,54.85Z"/><path class="cls-2" d="M4.2,74.15a5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7,5.79,5.79,0,0,1,0,8.2,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.79,5.79,0,0,1,0-8.2Z"/><path class="cls-1" d="M4.2,74.15a5.6,5.6,0,0,1,4.1-1.7,5.6,5.6,0,0,1,4.1,1.7,5.79,5.79,0,0,1,0,8.2,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.79,5.79,0,0,1,0-8.2Z"/><path class="cls-2" d="M37.45,31.6a5.8,5.8,0,0,1-9.9,4.1,5.8,5.8,0,1,1,8.2-8.2A5.6,5.6,0,0,1,37.45,31.6Z"/><path class="cls-1" d="M37.45,31.6a5.8,5.8,0,0,1-9.9,4.1,5.8,5.8,0,1,1,8.2-8.2A5.6,5.6,0,0,1,37.45,31.6Z"/><path class="cls-2" d="M27.55,4.2a5.79,5.79,0,0,1,8.2,0,5.6,5.6,0,0,1,1.7,4.1,5.6,5.6,0,0,1-1.7,4.1,5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1A5.6,5.6,0,0,1,27.55,4.2Z"/><path class="cls-1" d="M27.55,4.2a5.79,5.79,0,0,1,8.2,0,5.6,5.6,0,0,1,1.7,4.1,5.6,5.6,0,0,1-1.7,4.1,5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1A5.6,5.6,0,0,1,27.55,4.2Z"/><path class="cls-2" d="M27.55,50.8a5.79,5.79,0,0,1,8.2,0,5.53,5.53,0,0,1,1.7,4.05,5.8,5.8,0,0,1-9.9,4.1,5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,27.55,50.8Z"/><path class="cls-1" d="M27.55,50.8a5.79,5.79,0,0,1,8.2,0,5.53,5.53,0,0,1,1.7,4.05,5.8,5.8,0,0,1-9.9,4.1,5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,27.55,50.8Z"/> <path class="cls-2" d="M37.45,78.25a5.8,5.8,0,0,1-9.9,4.1,5.8,5.8,0,1,1,8.2-8.2A5.6,5.6,0,0,1,37.45,78.25Z"/><path class="cls-1" d="M37.45,78.25a5.8,5.8,0,0,1-9.9,4.1,5.8,5.8,0,1,1,8.2-8.2A5.6,5.6,0,0,1,37.45,78.25Z"/><path class="cls-2" d="M54.9,25.8A5.8,5.8,0,0,1,59,35.7a5.8,5.8,0,1,1-8.2-8.2A5.6,5.6,0,0,1,54.9,25.8Z"/><path class="cls-1" d="M54.9,25.8A5.8,5.8,0,0,1,59,35.7a5.8,5.8,0,1,1-8.2-8.2A5.6,5.6,0,0,1,54.9,25.8Z"/><path class="cls-2" d="M54.9,2.5A5.6,5.6,0,0,1,59,4.2a5.6,5.6,0,0,1,1.7,4.1A5.6,5.6,0,0,1,59,12.4a5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1,5.6,5.6,0,0,1,1.7-4.1A5.6,5.6,0,0,1,54.9,2.5Z"/><path class="cls-1" d="M54.9,2.5A5.6,5.6,0,0,1,59,4.2a5.6,5.6,0,0,1,1.7,4.1A5.6,5.6,0,0,1,59,12.4a5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1,5.6,5.6,0,0,1,1.7-4.1A5.6,5.6,0,0,1,54.9,2.5Z"/><path class="cls-2" d="M54.9,49.1A5.6,5.6,0,0,1,59,50.8a5.53,5.53,0,0,1,1.7,4.05,5.8,5.8,0,0,1-11.6,0,5.53,5.53,0,0,1,1.7-4.05A5.6,5.6,0,0,1,54.9,49.1Z"/><path class="cls-1" d="M54.9,49.1A5.6,5.6,0,0,1,59,50.8a5.53,5.53,0,0,1,1.7,4.05,5.8,5.8,0,0,1-11.6,0,5.53,5.53,0,0,1,1.7-4.05A5.6,5.6,0,0,1,54.9,49.1Z"/><path class="cls-2" d="M50.8,82.35a5.79,5.79,0,1,1,4.1,1.7A5.6,5.6,0,0,1,50.8,82.35Z"/><path class="cls-1" d="M50.8,82.35a5.79,5.79,0,1,1,4.1,1.7A5.6,5.6,0,0,1,50.8,82.35Z"/><path class="cls-2" d="M82.3,27.5a5.79,5.79,0,1,1-4.1-1.7A5.6,5.6,0,0,1,82.3,27.5Z"/><path class="cls-1" d="M82.3,27.5a5.79,5.79,0,1,1-4.1-1.7A5.6,5.6,0,0,1,82.3,27.5Z"/><path class="cls-2" d="M74.1,4.2a5.79,5.79,0,0,1,8.2,0A5.6,5.6,0,0,1,84,8.3a5.6,5.6,0,0,1-1.7,4.1,5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1A5.6,5.6,0,0,1,74.1,4.2Z"/><path class="cls-1" d="M74.1,4.2a5.79,5.79,0,0,1,8.2,0A5.6,5.6,0,0,1,84,8.3a5.6,5.6,0,0,1-1.7,4.1,5.79,5.79,0,0,1-8.2,0,5.6,5.6,0,0,1-1.7-4.1A5.6,5.6,0,0,1,74.1,4.2Z"/><path class="cls-2" d="M74.1,50.8a5.79,5.79,0,0,1,8.2,0A5.53,5.53,0,0,1,84,54.85a5.8,5.8,0,0,1-11.6,0A5.53,5.53,0,0,1,74.1,50.8Z"/><path class="cls-1" d="M74.1,50.8a5.79,5.79,0,0,1,8.2,0A5.53,5.53,0,0,1,84,54.85a5.8,5.8,0,0,1-11.6,0A5.53,5.53,0,0,1,74.1,50.8Z"/><path class="cls-2" d="M82.3,74.15a5.79,5.79,0,1,1-4.1-1.7A5.6,5.6,0,0,1,82.3,74.15Z"/><path class="cls-1" d="M82.3,74.15a5.79,5.79,0,1,1-4.1-1.7A5.6,5.6,0,0,1,82.3,74.15Z"/></g></symbol></defs><g><use width="86.5" height="86.55" xlink:href="#logo"/></g></svg>';
-    // ftue.logo.uri = encodeURIComponent(window.ftue.logo.svg);
-
-    // const img = new window.Image();
-    // img.onload = () => {
-    //     window.ftue.logoContext.drawImage(img, ftue.centerX - xOffset, ftue.centerY - yOffset, logoWidth, logoHeight);
-    // };
-    // img.src = "data:image/svg+xml,"+window.ftue.logo.uri;
-    
-    // ftue.canvas.parentNode.insertBefore(ftue.logo, ftue.canvas);
-};
-
 const preRenderer = () => {
     let num = ftue.colours.length;
 
@@ -108,8 +79,7 @@ const preRenderCanvas = (colour) => {
     circle.height = ftue.iconW;
     
     const circleCxt = circle.getContext('2d'),
-          // svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.6 16.6"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}.cls-2,.cls-3{fill:none;stroke:'+colour+';stroke-linecap:round;}.cls-2{stroke-linejoin:round;stroke-width:5px;}.cls-3{stroke-miterlimit:2;stroke-width:2px;}</style></defs><title>Asset 3</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_5" data-name="Layer 5"><path class="cls-1" d="M4.2,4.2A5.6,5.6,0,0,1,8.3,2.5a5.6,5.6,0,0,1,4.1,1.7,5.53,5.53,0,0,1,1.7,4.05,5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,4.2,4.2Z"/><path class="cls-2" d="M4.2,4.2A5.6,5.6,0,0,1,8.3,2.5a5.6,5.6,0,0,1,4.1,1.7,5.53,5.53,0,0,1,1.7,4.05,5.6,5.6,0,0,1-1.7,4.1,5.6,5.6,0,0,1-4.1,1.7,5.6,5.6,0,0,1-4.1-1.7,5.6,5.6,0,0,1-1.7-4.1A5.53,5.53,0,0,1,4.2,4.2Z"/><line class="cls-3" x1="8.3" y1="1.25" x2="8.3" y2="15.25"/></g></g></svg>',
-          svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;}.cls-1,.cls-2,.cls-3,.cls-4{stroke:'+colour+';stroke-miterlimit:10;}.cls-1,.cls-2{stroke-linecap:round;}.cls-2,.cls-3,.cls-4{stroke-width:5px;}.cls-4{fill:#fff;}</style></defs><g><path class="cls-2" d="M26.4,19.31a40,40,0,0,1,54,4.8"/><path class="cls-3" d="M80.37,24.11a40.09,40.09,0,0,1,7.08,43.15"/><circle class="cls-4" cx="87.6" cy="66.95" r="8"/><path class="cls-2" d="M75.6,82.69a40,40,0,0,1-54-4.8"/><path class="cls-3" d="M21.63,77.89a40.09,40.09,0,0,1-7.08-43.15"/><circle class="cls-4" cx="14.4" cy="35.05" r="8"/></g></svg>',
+          svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 115"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;}.cls-1,.cls-2,.cls-3,.cls-4{stroke:'+colour+';stroke-miterlimit:10;}.cls-1,.cls-2{stroke-linecap:round;}.cls-2,.cls-3,.cls-4{stroke-width:5px;}.cls-4{fill:#fff;}</style></defs><g><path class="cls-2" d="M33.18,26.1a40,40,0,0,1,54,4.8"/><path class="cls-3" d="M87.15,30.9A40,40,0,0,1,94.23,74"/><circle class="cls-4" cx="94.38" cy="73.73" r="8"/><path class="cls-2" d="M82.38,89.47a40,40,0,0,1-54-4.8"/><path class="cls-3" d="M28.41,84.67a40.09,40.09,0,0,1-7.08-43.15"/><circle class="cls-4" cx="21.18" cy="41.84" r="8"/></g></svg>',
         uri = encodeURIComponent(svg),
 
           
@@ -397,81 +367,17 @@ const renderParticle = () => {
     }
 };
 
-const animateParticles = () => {
-    ftue.mainTimeline =  anime.timeline().add({
-        targets: ftue.particles,
-        duration: Infinity,
-        ease: 'linear',
-        update: (anim) => {
-            if(ftue){
-                ftue.currentTime = anim.currentTime;
-                randomClick();
-                updateParticles();
-                renderParticle();
-            }
-        }
-    });
+const animateParticles = (timestamp) => {
+    if(!ftue.start) ftue.start = timestamp;
+    ftue.currentTime = timestamp - ftue.start;
+    randomClick();
+    updateParticles();
+    renderParticle();
+    window.requestAnimationFrame(animateParticles);
 };
 
 const remove = (elem) => {
     ftue.canvas.parentNode.removeChild(elem);
 };
-
-const setScene = () => {
-    // anime.timeline().add({
-    //     targets: ftue.logo,
-    //     opacity: 0,
-    //     duration: 1000,
-    //     easing:'linear',
-    //     delay: 1000,
-    //     complete: () => {
-    //         remove(ftue.logo);
-    //     }
-    // });
-
-    //  anime.timeline().add({
-    //     targets: ftue.canvas,
-    //     duration: 1000,
-    //     backgroundColor: [{value: '#fff'}, {value: 'rgb(255, 255, 255)'}],
-    //     easing:'easeInCubic',
-    //     delay: 1000
-    // });
-};
-
-const check = () => {
-    
-    // if(window.mainSeq){
-        let i = ftue.particles.length;
-        while(i--){
-            ftue.particles[i].delay = ftue.currentTime;
-            ftue.particles[i].state = 'fadeOut';
-        }
-        
-        // clearTimeout(ftue.check);
-        // ftue.destroy = setTimeout(destroy, 2000);
-    //}  else {
-    //     ftue.check = setTimeout(check, 1000);
-    // }
-};
-
-// const destroy = () => {
-//     clearTimeout(ftue.destroy);
-
-//     remove(ftue.canvas);
-//     ftue = null;
-
-//     if(window.mainSeq){
-//         window.mainSeq();
-//     }
-// };
-
-// const autoClick = () => {
-//      anime({
-//         duration: 5000 ,
-//         complete: () => {
-//             check();
-//         }
-//     });
-// };
 
 init();
