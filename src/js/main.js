@@ -6,6 +6,8 @@ const initDashboard = () => {
     preRender({anim});
 
     window.requestAnimationFrame(animateParticles);
+
+    
 };
 
 const createObject = () => {
