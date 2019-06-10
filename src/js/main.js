@@ -1,141 +1,137 @@
-// Boilderplate from: https://github.com/villedieumorgan/npm-es6-build-boilerplate/blob/master/package.json
+import { Particle } from './particles';
 
-//import anime from 'animejs';
+const initDashboard = () => {
 
-const init = () => {
-    window.ftue = globalObject();
-    setCanvasSize();
-    preRenderer();
+    setCanvasSize({anim});
+    preRender({anim});
 
     window.requestAnimationFrame(animateParticles);
-    window.addEventListener('resize', setCanvasSize, false);
 };
 
-const globalObject = () => {
-    const ftue = {};
-    ftue.centerX = window.innerWidth / 2;
-    ftue.centerY = window.innerHeight / 2;
-    ftue.pointerX = 0;
-    ftue.pointerY = 0;
-    // ftue.colours = ['#500A28', '#640032', '#AF144B', '#FA551E', '#F0325A', '#FF780F', '#960528'];
-    ftue.colours = ['#F0325A', '#FF780F', '#960528'];
-    ftue.iconW = 75;
-    ftue.grid = null;
-    ftue.particles = null;
-    ftue.preRenderCanvases = [];
-    ftue.currentTime = 0;
+const createObject = () => {
+    const animation = {
+        colours: ['#000000', '#73505d', '#312f43', '#5c7364', '#736d5c', '#3a3834'],
+        pointerX: 0,
+        pointerY: 0,
+        grid: null,
+        particles: null,
+        offscreenCanvases: [],
+        time: 0,
+        svgWidth: 75,
+        preRenderCanvases: [],
+        grid: [],
+        particles: [],
+        currentTime: 0,
+        start: -1,
 
-    ftue.testCount = 0;
-    
-    
-    ftue.canvas = document.getElementById("ftue");
-    ftue.canvas.style.position = 'absolute';
-    ftue.canvas.style.top = '0px';
-    ftue.canvas.style.left = '0px';
-    ftue.canvas.style.backgroundColor = 'transparent';
-    ftue.context = ftue.canvas.getContext('2d');
-    ftue.tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'mousedown';
+        element: document.getElementById('dashboard'),
+        canvas: document.createElement('canvas'),
+    };
 
-    ftue.canvas.addEventListener(ftue.tap, (evt) => {
+    animation.element.innerHTML = "";
+    animation.element.appendChild(animation.canvas);
+
+    animation.context = animation.canvas.getContext('2d');
+    animation.element.appendChild(animation.canvas);
+
+    animation.canvas.addEventListener('mousemove', (evt) =>{
         updateCoords(evt);
+        let obj = findParticle(anim);
         
-        const obj = findParticle(window);
-        if(obj.state === 'spin' || obj.state === 'hover'){
-            obj.state = 'click';
-        } else if(obj.state === 'special'){
-            setTimeout(createSpecialParticle, 2000);
-            
-            let i = ftue.particles.length;
-            while(i--){
-                ftue.particles[i].delay = ftue.currentTime;
-                ftue.particles[i].state = 'wave';
-    }
-        }
-    }, false);
-    
-    ftue.canvas.addEventListener('mousemove', (evt) => {
-        updateCoords(evt);
-        
-        const obj = findParticle(window);
         if(obj.state !== 'fadeIn' && obj.state !== 'fadeOut' && obj.state !== 'hover' && obj.state !== 'special' && obj.state !== 'wave'){
             obj.state = 'hover';
         }
     }, false);
-    
-    return ftue;
-};
 
-const preRenderer = () => {
-    let num = ftue.colours.length;
 
-    while(num--){
-        ftue.preRenderCanvases.push( preRenderCanvas(ftue.colours[num]) );
-    }
-};
+    var cursorTimer;
 
-const preRenderCanvas = (colour) => {
-    const circle = document.createElement('canvas');
-    circle.width = ftue.iconW;
-    circle.height = ftue.iconW;
-    
-    const circleCxt = circle.getContext('2d'),
-          svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 115"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;}.cls-1,.cls-2,.cls-3,.cls-4{stroke:'+colour+';stroke-miterlimit:10;}.cls-1,.cls-2{stroke-linecap:round;}.cls-2,.cls-3,.cls-4{stroke-width:5px;}.cls-4{fill:#fff;}</style></defs><g><path class="cls-2" d="M33.18,26.1a40,40,0,0,1,54,4.8"/><path class="cls-3" d="M87.15,30.9A40,40,0,0,1,94.23,74"/><circle class="cls-4" cx="94.38" cy="73.73" r="8"/><path class="cls-2" d="M82.38,89.47a40,40,0,0,1-54-4.8"/><path class="cls-3" d="M28.41,84.67a40.09,40.09,0,0,1-7.08-43.15"/><circle class="cls-4" cx="21.18" cy="41.84" r="8"/></g></svg>',
-        uri = encodeURIComponent(svg),
+    window.addEventListener('resize', (evt) =>{
 
-          
-        img = new window.Image();
-    img.onload = () => {
-        circleCxt.drawImage(img, 0, 0, ftue.iconW, ftue.iconW);
-    };
-    img.src = "data:image/svg+xml,"+uri;
+        clearTimeout(cursorTimer);
+        cursorTimer = setTimeout(function() {
+            // console.log('resize');
+            setCanvasSize({anim});
+        }, 500);
+    }, false);
 
-    return circle;
-};
+    animation.canvas.addEventListener('click', (evt) => {
+        updateCoords(evt);
+        let obj = findParticle(anim);
 
-const setCanvasSize = () => {
-    const { canvas } = window.ftue;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.width = window.innerWidth + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-    canvas.getContext('2d').scale(1, 1);
+        if(obj.state === 'spin' || obj.state === 'hover'){
+            obj.state = 'click';
+            let i = anim.particles.length;
 
-    ftue.grid = setGrid();
-    ftue.particles = createParticles();
+            while(i--){
+                anim.particles[i].distanceFromSpecial = (Math.abs(obj.xArr - anim.particles[i].xArr) + Math.abs(obj.yArr - anim.particles[i].yArr)) * 100;
+                anim.particles[i].delay = anim.currentTime;
+                anim.particles[i].state = 'wave';
+            }
+        } else if(obj.state === 'special'){
+            // setTimeout(createSpecialParticle, 2000);
 
-    createSpecialParticle();
-};
-
-const findParticle = ({ftue}) => {
-    const x = Math.floor(ftue.pointerX / ftue.iconW),
-          y = Math.floor(ftue.pointerY / ftue.iconW);
-    
-    return (ftue.grid && ftue.grid[x] && ftue.grid[x][y])? ftue.grid[x][y]: {};
-};
-
-const setGrid = () => {
-    const { canvas } = window.ftue,
-          gridW = Math.floor(canvas.width / ftue.iconW),
-          gridH = Math.floor(canvas.height / ftue.iconW);
-
-    // ugly, thanks IE11
-    const multiArray = new Array(gridW);
-    for (var i = 0; i < gridW; i++) {
-        multiArray[i] = new Array(gridH);
-        for(var j = 0; j < gridH; j++){
-            multiArray[i][j] = 0;
+            let i = anim.particles.length;
+            while(i--){
+                anim.particles[i].delay = anim.currentTime;
+                anim.particles[i].state = 'wave';
+            }
         }
-    }
-    return multiArray;
+    },false);
+
+    return animation;
 };
 
-const createParticles = () => {
+
+
+const findParticle = (anim) => {
+    const x = Math.floor(anim.pointerX / anim.svgWidth),
+          y = Math.floor(anim.pointerY / anim.svgWidth),
+          temp = (anim.grid && anim.grid[x] && anim.grid[x][y])? anim.grid[x][y]: {};
+    return temp;
+};
+
+const setCanvasSize = ({anim}) => {
+    const availableWidth = anim.canvas.width = anim.canvas.height = anim.element.getBoundingClientRect().width;
+
+    // if(availableWidth % anim.svgWidth > 1){
+    const space = availableWidth % anim.svgWidth,
+          halfTile = anim.svgWidth / 2,
+          newWidth = tileSizeIncrease({
+              width: availableWidth,
+              limit: anim.svgWidth,
+              num: anim.svgWidth+1 });
+    anim.svgWidth = newWidth;
+
+    anim.grid = setGrid({canvas:anim.canvas, svgWidth:anim.svgWidth});
+    anim.particles = createParticles({anim});
+
+    return {};
+};
+
+const updateCoords = (evt) => {
+    // https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
+    let totalOffsetX = 0,
+        totalOffsetY = 0;
+
+    do{
+        totalOffsetX += anim.canvas.offsetLeft - anim.canvas.scrollLeft;
+        totalOffsetY += anim.canvas.offsetTop - anim.canvas.scrollTop;
+    }
+    while(anim.canvas == anim.canvas.offsetParent)
+
+    anim.pointerX = evt.pageX - totalOffsetX;
+    anim.pointerY = evt.pageY - totalOffsetY;
+};
+
+const createParticles = ({anim}) => {
     const particles = [];
 
-    ftue.grid.map((row, rIndex) => {
+    anim.grid.map((row, rIndex) => {
         return row.map((cell, cIndex) => {
-            const obj = createParticule(rIndex, cIndex);
-            ftue.grid[rIndex][cIndex] = obj;
+            const obj = new Particle({x: rIndex, y:cIndex, anim});
+            // const obj = Particle({x: rIndex, y:cIndex, anim});
+            anim.grid[rIndex][cIndex] = obj;
             particles.push(obj);
         });
     });
@@ -143,241 +139,77 @@ const createParticles = () => {
     return particles;
 };
 
-const updateCoords = (evt) => {
-  ftue.pointerX = evt.clientX || evt.touches[0].clientX;
-  ftue.pointerY = evt.clientY || evt.touches[0].clientY;
+const setGrid = ({canvas, svgWidth}) => {
+    const coloumns = Math.floor(canvas.width / svgWidth),
+          rows = Math.floor(canvas.width / svgWidth);
+
+    // return (new Array(coloumns).fill(0).map( () => new Array(rows).fill(0)) );
+    const multiArray = new Array(coloumns);
+    for (var i = 0; i < coloumns; i++) {
+        multiArray[i] = new Array(rows);
+        for(var j = 0; j < rows; j++){
+            multiArray[i][j] = 0;
+        }
+    }
+    return multiArray;
 };
 
-const recursive = (val, length) => {
-    return (val >= length)? recursive((val-length), length) : val;
+const tileSizeIncrease = ({width, limit, num}) => {
+    // local optima
+    return (width % num < limit)? tileSizeIncrease({width, limit, num: num+1}) : num-1;
 };
 
-const getColour = (x, y) => {
-    const length = ftue.colours.length,
-          xOut = recursive(x, length),
-          yOut = recursive(y, length),
-          sum = recursive( (xOut+yOut) ,length);
+const preRender = ({anim}) => {
+    let num = anim.colours.length;
 
-    return sum;
-};
-
-const getHoverColour = (p) => {
-    if(!p.colourChange) return p.colour;
-    p.colourChange = false;
-    
-    return ((p.colour + 1) >= ftue.colours.length)? 0 : (p.colour + 1);
-};
-
-const getWaveColour = (p) => {
-    if(!p.colourChange) return p.colour;
-    p.colourChange = false;
-    
-    return 0;
-};
-
-const createParticule = (x,y) => {
-    const p = {};
-    p.xArr = x;
-    p.yArr = y;
-    p.distanceFromSpecial = 0;
-    p.xPos = x * ftue.iconW;
-    p.yPos = y * ftue.iconW;
-    p.width = ftue.iconW;
-    p.centre = p.width / 2;
-    p.halfW = p.width / 2;
-    p.alpha = 0;
-    p.delay = 0;
-    p.fadingStart = (p.xPos * 0.5) + (p.yPos * 0.5);
-    // p.colour = getColour(p.xPos/ftue.iconW, p.yPos/ftue.iconW);
-    p.colour = 0;
-    p.outroStart = 0;
-
-    // flags
-    p.state = 'fadeIn';
-    
-    p.remove = false;
-    p.bigger = false;
-    p.colourChange = false;
-    // p.tweening = false;
-
-    p.speed = 1;
-    
-    p.angle = 0;
-    p.radians = Math.PI/180;
-
-    p.fadeIn = () => {
-        if((p.fadingStart + p.delay) <= ftue.currentTime){
-            p.alpha += 0.1;
-            
-            if(p.alpha >= 1){
-                p.state = 'spin';
-            }
-        }
-    };
-
-    p.fadeOut = () => {
-        if((p.fadingStart + p.delay) <= ftue.currentTime){
-            p.alpha -= 0.2;
-
-            if(p.alpha < 0.1){
-                p.remove = true;
-            }
-        }
-    };
-
-    p.pulse = () => {
-        if(!p.bigger){
-            p.width = p.width * 0.98;
-            if(p.width < 20){
-                p.bigger = true;
-                p.colour = ftue.colours.length-1;
-            }
-        } else if(p.bigger){
-            p.width = p.width * 1.05;
-            p.colour = getHoverColour(p);
-            
-            if(p.width >= ftue.iconW){
-                p.width = ftue.iconW;
-                p.bigger = false;
-            }
-        }
-        
-        p.halfW = p.width / 2;
-    };
-
-    p.hover = () => {
-        if(!p.bigger){
-            p.width = p.width * 0.9;
-            if(p.width < 20){
-                p.bigger = true;
-                p.colourChange = true;
-            }
-        } else if(p.bigger){
-            p.width = p.width * 1.1;
-            p.colour = getHoverColour(p);
-            
-            if(p.width >= ftue.iconW){
-                p.width = ftue.iconW;
-                p.bigger = false;
-                p.state = 'spin';
-            }
-        }
-        
-        p.halfW = p.width / 2;
-    };
-
-    p.wave = () => {
-        if((p.distanceFromSpecial + p.delay) <= ftue.currentTime){
-            if(!p.bigger){
-                p.width = p.width * 0.9;
-                if(p.width < 20){
-                    p.bigger = true;
-                    p.colourChange = true;
-                }
-            } else if(p.bigger){
-                p.width = p.width * 1.1;
-                p.colour = getWaveColour(p);
-                
-                if(p.width >= ftue.iconW){
-                    p.width = ftue.iconW;
-                    p.bigger = false;
-                    p.state = 'spin';
-                }
-            }
-        
-            p.halfW = p.width / 2;
-        }
-    };
-
-    p.click = () => {
-        p.width = p.width * 0.85;
-        p.halfW = p.width / 2;
-        if(p.width < 5){ p.remove = true; }
-    };
-    
-    p.update = () => {
-        p.angle = (p.angle > 360)? 0 : p.angle + p.speed;
-        p.rAngle = p.angle * p.radians;
-
-        switch(p.state){
-        case 'special': p.pulse(); break;
-        case 'wave': p.wave(); break;
-        case 'fadeIn': p.fadeIn(); break;
-        case 'fadeOut': p.fadeOut(); break;
-        case 'hover':  p.hover(); break;
-        case 'click':  p.click(); break;
-        default: p.state = 'spin';
-        }
-    };
-
-    p.draw = () => {
-        if(p.state === 'fadeIn' || p.state === 'fadeOut'){
-            ftue.context.globalAlpha = p.alpha;
-        }
-        
-        if(!p.remove){
-            ftue.context.save(); 
-	        ftue.context.translate(p.xPos + p.centre, p.yPos + p.centre);
-	        ftue.context.rotate(p.rAngle);
-            ftue.context.drawImage(ftue.preRenderCanvases[p.colour], -p.halfW, -p.halfW, p.width, p.width);
-	        ftue.context.restore();
-        }
-
-        if(p.state === 'fadeOut'){
-            ftue.context.globalAlpha = 1;
-        }
-    };
-    
-  return p;
-};
-
-const createSpecialParticle = () => {
-    const random = Math.floor(Math.random() * ftue.particles.length + 1);
-    ftue.particles[random].state = 'special';
-
-    let i = ftue.particles.length;
-    while(i--){
-        ftue.particles[i].distanceFromSpecial = (Math.abs(ftue.particles[random].xArr - ftue.particles[i].xArr) + Math.abs(ftue.particles[random].yArr - ftue.particles[i].yArr)) * 50;
+    while(num--){
+        anim.preRenderCanvases.push(preRenderCanvas(anim.colours[num]) );
     }
 };
 
-const randomClick = () => {
-    if(Math.random() < 0.95) return;
+const preRenderCanvas = (colour) => {
+    const circle = document.createElement('canvas');
+    circle.width =  circle.height = anim.svgWidth;
     
-    const random = Math.floor(Math.random() * ftue.particles.length + 1);
+    const circleCxt = circle.getContext('2d'),
+          svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 115" width="75px" height="75px"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;}.cls-1,.cls-2,.cls-3,.cls-4{stroke:'+colour+';stroke-miterlimit:10;}.cls-1,.cls-2{stroke-linecap:round;}.cls-2,.cls-3,.cls-4{stroke-width:5px;}.cls-4{fill:#fff;}</style></defs><g><path class="cls-2" d="M33.18,26.1a40,40,0,0,1,54,4.8"/><path class="cls-3" d="M87.15,30.9A40,40,0,0,1,94.23,74"/><circle class="cls-4" cx="94.38" cy="73.73" r="8"/><path class="cls-2" d="M82.38,89.47a40,40,0,0,1-54-4.8"/><path class="cls-3" d="M28.41,84.67a40.09,40.09,0,0,1-7.08-43.15"/><circle class="cls-4" cx="21.18" cy="41.84" r="8"/></g></svg>',
+        uri = encodeURIComponent(svg),
 
-    if(ftue.particles[random] && ftue.particles[random].state !== 'fadeIn' && ftue.particles[random].state !== 'fadeOut' && ftue.particles[random].state !== 'special' && ftue.particles[random].state !== 'wave'){
-        ftue.particles[random].state = 'hover';
-    }
+          
+        img = new window.Image();
+    img.onload = () => {
+        circleCxt.drawImage(img, 0, 0, anim.svgWidth, anim.svgWidth);
+    };
+    img.src = "data:image/svg+xml,"+uri;
+
+    return circle;
 };
 
 const updateParticles = () => {
-    let i = ftue.particles.length;
+    let i = anim.particles.length;
     while(i--){
-        ftue.particles[i].update();
+        anim.particles[i].update();
     }
 };
 
 const renderParticle = () => {
-    ftue.context.clearRect(0, 0, ftue.canvas.width, ftue.canvas.height);
-    
-    let i = ftue.particles.length;
+    anim.context.clearRect(0, 0, anim.canvas.width, anim.canvas.height);
+    let i = anim.particles.length;
     while(i--){
-        ftue.particles[i].draw();
+        anim.particles[i].draw();
     }
 };
 
 const animateParticles = (timestamp) => {
-    if(!ftue.start) ftue.start = timestamp;
-    ftue.currentTime = timestamp - ftue.start;
-    randomClick();
+    if(anim.start === -1) anim.start = timestamp;
+    anim.currentTime = timestamp - anim.start;
+    // randomClick();
     updateParticles();
     renderParticle();
     window.requestAnimationFrame(animateParticles);
 };
 
-const remove = (elem) => {
-    ftue.canvas.parentNode.removeChild(elem);
-};
+const anim = createObject();
+initDashboard();
 
-init();
+
