@@ -2,3 +2,5 @@
 
 Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.
 
+This code still smells a bit, I intend to address it as soon as my schedule allows.
+
