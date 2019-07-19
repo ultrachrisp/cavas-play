@@ -15,14 +15,16 @@
     "devDependencies": {
         "@babel/cli": "^7.4.3",
         "@babel/core": "^7.4.3",
-        "@babel/preset-env": "^7.4.3",
         "@babel/plugin-proposal-class-properties": "^7.4.4",
+        "@babel/preset-env": "^7.4.3",
         "babelify": "^10.0.0",
         "browserify": "^16.2.3",
         "browserify-livereload": "^1.0.10",
+        "mocha": "^6.2.0",
         "watchify": "^3.11.1"
     },
     "scripts": {
+        "test": "mocha",
         "watch": "watchify -p [ browserify-livereload --host 127.0.0.1 --port 1337 ] src/js/main.js -o dist/js/main.bundle.js",
         "build": "browserify src/js/main.js -o dist/js/main.bundle.js"
     },
