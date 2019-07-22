@@ -1,5 +1,8 @@
-let tdd = require('../src/js/tdd.js');
-let assert = require('assert');
+const  particles = require('../src/dev/particles.js');
+
+const assert = require('assert');
+// par = require('../src/dev/particles.js');
+
 
 describe('Array', function() {
   describe('#indexOf()', function() {
@@ -11,8 +14,8 @@ describe('Array', function() {
 
 describe('Contact', function() {
   describe('connections', function() {
-    it('should return 22', function() {
-        assert.equal(22, tdd.tester());
+    it('should return 23', function() {
+        assert.equal(23, par.particles());
     });
   });
 });
