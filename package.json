@@ -1,23 +1,21 @@
 {
     "name": "canvas-play",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.",
-    "main": "index.js",
-    "directories": {
-        "test": "test"
-    },
+    "main": "index.html",
     "scripts": {
         "start": "parcel index.html",
-        "build": "parcel build src/index.html",
-        "test": "parcel build ./test_map.js -d dist_test && ./node_modules/.bin/mocha -r jsdom-global/register"
+        "build": "parcel build index.html",
+        "test": "onchange 'src/js/*.js' 'test/*.js' -- npm run test:build",
+        "test:build": "parcel build ./test_map.js -d dist_test && ./node_modules/.bin/mocha -r jsdom-global/register"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ultrachrisp/cavas-play.git"
     },
     "keywords": [],
-    "author": "Chrisp",
-    "license": "ISC",
+    "author": "Chris Pyke",
+    "license": "GPL",
     "bugs": {
         "url": "https://github.com/ultrachrisp/cavas-play/issues"
     },
@@ -25,8 +23,10 @@
     "devDependencies": {
         "@babel/core": "^7.5.5",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "chai": "^4.2.0",
         "jsdom": "15.1.1",
         "jsdom-global": "3.0.2",
-        "mocha": "^6.2.0"
+        "mocha": "^6.2.0",
+        "onchange": "^6.0.0"
     }
 }

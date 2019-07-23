@@ -1,6 +1,5 @@
-const testMap  = require('../dist_test/test_map.js').default;
-
 const assert = require('assert');
+const testMap  = require('../dist_test/test_map.js').default;
 
 describe('Array', function() {
     describe('#indexOf()', function() {
@@ -15,6 +14,16 @@ describe('Contact', function() {
         it('should return 23', function() {
             var thing = new testMap.Particle();
             assert.equal(23, thing.test());
+        });
+    });
+});
+
+
+describe('Contact', function() {
+    describe('connections', function() {
+        it('should return 33', function() {
+            var thing = new testMap.Particle();
+            assert.equal(33, thing.test2());
         });
     });
 });

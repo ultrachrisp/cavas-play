@@ -3,4 +3,7 @@ export default class Particle {
     test(){
         return 23;
     }
+    test2(){
+        return 33;
+    }
 };
