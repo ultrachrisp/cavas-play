@@ -1,39 +1,32 @@
 {
     "name": "canvas-play",
     "version": "1.0.0",
-    "description": "Adventures in canvas",
-    "author": "Chrisp",
-    "private": false,
-    "license": "GNU GENERAL PUBLIC LICENSE",
-    "requires": true,
-    "lockfileVersion": 1,
-    "repository": {
-        "type": "https",
-        "url": "https://github.com/ultrachrisp/cavas-play.git"
-    },
-    "dependencies": {},
-    "devDependencies": {
-        "@babel/plugin-proposal-class-properties": "^7.4.4",
-        "@babel/preset-env": "^7.4.3",
-        "babel-plugin-add-module-exports": "^1.0.2",
-        "babel-plugin-import": "^1.12.0",
-        "babelify": "^10.0.0",
-        "browserify": "^16.2.3",
-        "browserify-livereload": "^1.0.10",
-        "mocha": "^6.2.0",
-        "watchify": "^3.11.1"
+    "description": "Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
     },
     "scripts": {
-        "test": "mocha --watch",
-        "watch": "watchify -p [ browserify-livereload --host 127.0.0.1 --port 1337 ] src/js/main.js -o dist/js/main.bundle.js",
-        "watch:dev": "watchify -p [ browserify-livereload --host 127.0.0.1 --port 1337 ] src/dev/main.js -o dist/dev/main.bundle.js",
-        "build": "browserify src/js/main.js -o dist/js/main.bundle.js"
+        "start": "parcel index.html",
+        "build": "parcel build src/index.html",
+        "test": "parcel build ./test_map.js -d dist_test && ./node_modules/.bin/mocha -r jsdom-global/register"
     },
-    "browserify": {
-        "transform": [
-            [
-                "babelify",{ "stage": [0] }
-            ]
-        ]
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ultrachrisp/cavas-play.git"
+    },
+    "keywords": [],
+    "author": "Chrisp",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ultrachrisp/cavas-play/issues"
+    },
+    "homepage": "https://github.com/ultrachrisp/cavas-play#readme",
+    "devDependencies": {
+        "@babel/core": "^7.5.5",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "jsdom": "15.1.1",
+        "jsdom-global": "3.0.2",
+        "mocha": "^6.2.0"
     }
 }

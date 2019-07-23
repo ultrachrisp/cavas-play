@@ -155,6 +155,10 @@ export class Particle{
         }
     };
 
+    test(){
+        return 23;
+    }
+    
     draw() {
         if(this.state === 'fadeIn' || this.state === 'fadeOut'){
             this.anim.context.globalAlpha = this.alpha;
