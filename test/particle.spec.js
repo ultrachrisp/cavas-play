@@ -1,29 +1,22 @@
-const assert = require('assert');
+const assert = require('chai').assert;
+
+// import { assert } from 'chai';
 const testMap  = require('../dist_test/test_map.js').default;
 
-describe('Array', function() {
-    describe('#indexOf()', function() {
-        it('should return -1 when the value is not present', function() {
-            assert.equal([1, 2, 3].indexOf(4), -1);
-        });
-    });
-});
+      var thing = testMap.Particle();
 
-describe('Contact', function() {
-    describe('connections', function() {
+describe('Particles', function() {
+    describe('Test fuction 1', function() {
         it('should return 23', function() {
-            var thing = new testMap.Particle();
-            assert.equal(23, thing.test());
+            assert.equal(thing.test(), 23, "Test is 23");
+        });
+    });
+
+    
+    describe('Test fuction 2', function() {
+        it('should return 34', function() {
+            assert.equal(thing.test2(), 34, "Test is 33");
         });
     });
 });
 
-
-describe('Contact', function() {
-    describe('connections', function() {
-        it('should return 33', function() {
-            var thing = new testMap.Particle();
-            assert.equal(33, thing.test2());
-        });
-    });
-});
