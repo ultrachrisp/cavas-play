@@ -6,6 +6,12 @@ const testMap  = require('../dist_test/test_map.js').default;
       var thing = testMap.Particle();
 
 describe('Particles', function() {
+    describe('obj', function() {
+        it('should not be null', function() {
+            assert.equal(thing, {}, "Test is 23");
+        });
+    });
+    
     describe('Test fuction 1', function() {
         it('should return 23', function() {
             assert.equal(thing.test(), 23, "Test is 23");
