@@ -1,14 +1,17 @@
-const json = '[{"hello": "hazit"}]';
+// const json = '[{"hello": "hazit"}]';
 
 export const tester = () => {return 77;};
 
-const getElement = selector => json ||document.querySelector(selector).innerHTML;
+const getElement = selector => document.querySelector(selector).innerHTML;
 const getJson = elem => JSON.parse(elem);
 
-const start = str => getJson(getElement(str));
+// const start =getJson(getElement("script[type='application/json']"));
+const start = str => str
+      |> getElement
+      |> getJson;
 
 const tagID = start("script[type='application/json']");
-console.log(json);
+console.log(tagID);
 
 export function Main(){
     return {
