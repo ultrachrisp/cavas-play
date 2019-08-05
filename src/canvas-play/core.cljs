@@ -1,4 +1,4 @@
-(ns cljs_example.core)
+(ns canvas_play.core)
 
 (def display (.getElementById js/document "display"))
 (def context (.getContext display "2d"))

@@ -1,8 +1,8 @@
-(defproject cljs-example "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+(defproject canvas-play "1.1.0"
+  :description "Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag."
+  :url "https://github.com/ultrachrisp/cavas-play.git"
+  :license {:name "The MIT License"
+            :url "https://github.com/ultrachrisp/canvas-play/blob/master/LICENSE"}
 
   :min-lein-version "2.9.1"
 
@@ -22,16 +22,16 @@
                 ;; The presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
                 ;; into your build
-                :figwheel {:on-jsload "cljs-example.core/on-js-reload"
+                :figwheel {:on-jsload "canvas-play.core/on-js-reload"
                            ;; :open-urls will pop open your application
                            ;; in the default browser once Figwheel has
                            ;; started and compiled your application.
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main cljs-example.core
+                :compiler {:main canvas-play.core
                            :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/cljs_example.js"
+                           :output-to "resources/public/js/compiled/canvas_play.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
                            ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
@@ -42,8 +42,8 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/cljs_example.js"
-                           :main cljs-example.core
+                :compiler {:output-to "resources/public/js/compiled/canvas_play.js"
+                           :main canvas-play.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 
