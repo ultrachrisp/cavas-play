@@ -1,10 +1,16 @@
 .DS_store
 .cache/
 
-
-node_modules/
-dist/
-dist_test/
-*/resources/
-.tern-port
-.tern-project
+/resources/public/js/compiled/**
+figwheel_server.log
+pom.xml
+*jar
+/lib/
+/classes/
+/out/
+/target/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.repl
+.nrepl-port
