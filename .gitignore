@@ -1,16 +1,16 @@
-.DS_store
-.cache/
+.DS_Store
 
-/resources/public/js/compiled/**
-figwheel_server.log
 pom.xml
 *jar
 /lib/
 /classes/
-/out/
 /target/
+/out
+*out
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
 .repl
 .nrepl-port
+.cpcache/
+.rebel_readline_history
