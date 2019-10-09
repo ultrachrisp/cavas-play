@@ -1,6 +1,6 @@
 #+TITLE: Adventures in canvas
 
-Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.
+Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in HTML canvas concepts.
 
-This code still smells a bit at the moment. I am going to attempt a more functional approach to writing particle systems in ES6.
+This code still smells! I am attempting a more functional approach to writing particle systems in ES6.
 
