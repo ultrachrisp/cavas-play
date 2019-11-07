@@ -1,4 +1,4 @@
-function createCanvas({selector}){
+export function createCanvas({selector}){
   const canvas = document.createElement('canvas');
   const element = document.querySelector(selector);
   element.innerHTML = '';
@@ -12,8 +12,19 @@ function createCanvas({selector}){
   return canvas.getContext('2d');
 }
 
-function setCanvasSize(element){
-  console.log(element.getBoundingClientRect());
+export function loadSvg(settings, context){
+  const { svg, svgQuery, colours } = settings,
+        result = svg.replace(svgQuery, colours[1]),
+        uri = encodeURIComponent(result),
+        img = new Image();
+  
+  img.onload = () => {
+    context.drawImage(img, 0, 0);
+  };
+  img.src = `data:image/svg+xml,${uri}`;
 }
 
-export { createCanvas };
+// function setCanvasSize(element){
+//   console.log(element.getBoundingClientRect());
+// }
+
