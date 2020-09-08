@@ -1,6 +1,5 @@
 {
     "name": "canvas-play",
-    "version": "0.0.1",
     "description": "Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.",
     "main": "index.html",
     "scripts": {
@@ -20,12 +19,8 @@
     },
     "homepage": "https://github.com/ultrachrisp/cavas-play#readme",
     "devDependencies": {
-        "@babel/core": "^7.9.0",
-        "@babel/plugin-proposal-class-properties": "^7.8.3",
-        "@babel/plugin-proposal-pipeline-operator": "^7.8.3",
-        "@babel/preset-env": "^7.9.5",
-        "babel-jest": "^24.8.0",
-        "jest": "^24.8.0"
+        "parcel-bundler": "^1.12.4",
+        "typescript": "^4.0.2"
     },
     "dependencies": {}
 }
