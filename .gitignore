@@ -1,9 +1,7 @@
 .DS_store
 .cache/
 
-
 node_modules/
 dist/
 dist_test/
-.tern-port
-.tern-project
+.log/

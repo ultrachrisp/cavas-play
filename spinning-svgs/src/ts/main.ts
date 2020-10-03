@@ -12,10 +12,8 @@ function animateParticles(timestamp) {
 
 function getCanvasDimensions({ selector }) {
   const boundingRect: DOMRect = document.querySelector(selector).getBoundingClientRect();
-  const screenHeight: number = window.screen.height;
   const canvasWidth = boundingRect.width;
-  console.log(boundingRect, screenHeight, document.documentElement.offsetHeight);
-  const possibleHeight = screenHeight - boundingRect.bottom - boundingRect.y - boundingRect.top - document.documentElement.offsetHeight;
+  const possibleHeight = window.innerHeight - (boundingRect.top * 2);
   const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
   console.log(canvasHeight);
   return { canvasWidth, canvasHeight };
