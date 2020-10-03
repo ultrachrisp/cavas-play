@@ -10,20 +10,9 @@ function animateParticles(timestamp) {
   window.requestAnimationFrame(animateParticles);
 }
 
-function getCanvasDimensions({ selector }) {
-  const boundingRect: DOMRect = document.querySelector(selector).getBoundingClientRect();
-  const canvasWidth = boundingRect.width;
-  const possibleHeight = window.innerHeight - (boundingRect.top * 2);
-  const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
-  console.log(canvasHeight);
-  return { canvasWidth, canvasHeight };
-}
-
 function init() {
-  const { canvasWidth, canvasHeight } = getCanvasDimensions({ selector: settings.tag });
-  const context = createCanvas({ selector: settings.tag, canvasWidth, canvasHeight });
+  const context = createCanvas(settings.tag);
   loadSvg(settings, context);
-
 
   // console.log(img.src);
   // window.requestAnimationFrame(animateParticles);

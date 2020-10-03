@@ -1,15 +1,36 @@
-export function createCanvas({ selector, canvasWidth, canvasHeight }) {
-  const canvas = document.createElement('canvas');
+let timeOutFunctionId: number;
+const timeOutDuration: number = 250;
+
+export function createCanvas(selector: string) {
   const element = document.querySelector(selector);
-  element.innerHTML = '';
-  element.appendChild(canvas);
+  if (element) {
+    const canvas = document.createElement('canvas');
+    element.innerHTML = '';
+    element.appendChild(canvas);
+    setCanvasSize({ element, canvas });
+
+    window.addEventListener('resize', () => {
+      clearTimeout(timeOutFunctionId);
+      timeOutFunctionId = window.setTimeout(() => setCanvasSize({ element, canvas }), timeOutDuration);
+    }, false);
+    return canvas.getContext('2d');
+  }
+}
+
+function getCanvasDimensions(element: Element) {
+  const boundingRect: DOMRect = element.getBoundingClientRect();
+  const canvasWidth = boundingRect.width;
+  const possibleHeight = window.innerHeight - (boundingRect.top * 2);
+  const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
+  return { canvasWidth, canvasHeight };
+}
+
+function setCanvasSize({ element, canvas }: { element: Element, canvas: HTMLCanvasElement }) {
+  const { canvasWidth, canvasHeight } = getCanvasDimensions(element);
+
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-
-  // window.addEventListener('resize', (evt) => {
-  //     setCanvasSize(element);
-  // }, false);
-  return canvas.getContext('2d');
+  return canvas;
 }
 
 export function loadSvg(settings, context) {
@@ -23,8 +44,3 @@ export function loadSvg(settings, context) {
   };
   img.src = `data:image/svg+xml,${uri}`;
 }
-
-// function setCanvasSize(element){
-//   console.log(element.getBoundingClientRect());
-// }
-
