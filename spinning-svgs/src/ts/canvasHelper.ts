@@ -1,12 +1,16 @@
 let timeOutFunctionId: number;
 const timeOutDuration: number = 250;
 
+const imgWidth: number = 75;
+
 interface CanvasObject {
   element: Element | null;
   context: CanvasRenderingContext2D | null;
   width: number;
   height: number;
   grid: Array<Array<number>>;
+  x: number;
+  y: number;
 }
 
 export function createCanvas(tag: string): CanvasObject {
@@ -26,7 +30,9 @@ export function createCanvas(tag: string): CanvasObject {
       context: canvas.getContext('2d'),
       width: canvas.width,
       height: canvas.height,
-      grid: initGrid({ canvas, svgWidth: 75 }),
+      grid: initGrid({ canvas, svgWidth: imgWidth }),
+      x: 0,
+      y: 0,
     }
   } else {
     // this could fail hard, need to relook canvases that are not on the DOM
@@ -36,6 +42,8 @@ export function createCanvas(tag: string): CanvasObject {
       width: canvas.width,
       height: canvas.height,
       grid: initGrid({ canvas, svgWidth: 1 }),
+      x: 0,
+      y: 0,
     }
   }
 }
@@ -44,7 +52,7 @@ function initGrid({ canvas, svgWidth }) {
   const rows = Math.floor(canvas.height / svgWidth);
   const coloumns = Math.floor(canvas.width / svgWidth);
 
-  return (new Array(rows).fill(0).map(() => new Array(coloumns).fill(0)));
+  return (new Array(coloumns).fill(0).map(() => new Array(rows).fill(0)));
 }
 
 function getCanvasDimensions(element: Element) {
@@ -63,14 +71,16 @@ function setCanvasSize({ element, canvas }: { element: Element, canvas: HTMLCanv
   return canvas;
 }
 
-export function loadSvg(settings, context) {
+export function loadSvg(settings, obj, i, j) {
   const { svg, svgQuery, colours } = settings,
     result = svg.replace(svgQuery, colours[1]),
     uri = encodeURIComponent(result),
     img = new Image();
 
   img.onload = () => {
-    context.drawImage(img, 0, 0);
+    const xPos: number = i * imgWidth;
+    const yPos: number = j * imgWidth;
+    obj.context.drawImage(img, xPos, yPos);
   };
   img.src = `data:image/svg+xml,${uri}`;
 }

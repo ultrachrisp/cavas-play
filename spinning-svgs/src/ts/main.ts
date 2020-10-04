@@ -12,9 +12,16 @@ function animateParticles(timestamp) {
 
 function init() {
   const obj = createCanvas(settings.tag);
-  loadSvg(settings, obj.context);
+  // loadSvg(settings, obj);
 
-  // console.log(img.src);
+  obj.grid.forEach((row, i) => {
+    row.forEach((col, j) => {
+      // for (let i = 0; i < obj.grid.length; i++) {
+      //   for (let j = 0; j < obj.grid[i].length; j++) {
+      loadSvg(settings, obj, i, j);
+    })
+  })
+
   // window.requestAnimationFrame(animateParticles);
 }
 
