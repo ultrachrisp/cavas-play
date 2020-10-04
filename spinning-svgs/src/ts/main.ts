@@ -11,8 +11,8 @@ function animateParticles(timestamp) {
 }
 
 function init() {
-  const context = createCanvas(settings.tag);
-  loadSvg(settings, context);
+  const obj = createCanvas(settings.tag);
+  loadSvg(settings, obj.context);
 
   // console.log(img.src);
   // window.requestAnimationFrame(animateParticles);

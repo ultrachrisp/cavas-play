@@ -1,10 +1,18 @@
 let timeOutFunctionId: number;
 const timeOutDuration: number = 250;
 
-export function createCanvas(tag: string) {
+interface CanvasObject {
+  element: Element | null;
+  context: CanvasRenderingContext2D | null;
+  width: number;
+  height: number;
+  grid: Array<Array<number>>;
+}
+
+export function createCanvas(tag: string): CanvasObject {
+  const canvas = document.createElement('canvas');
   const element = document.querySelector(tag);
   if (element) {
-    const canvas = document.createElement('canvas');
     element.innerHTML = '';
     element.appendChild(canvas);
     setCanvasSize({ element, canvas });
@@ -13,8 +21,30 @@ export function createCanvas(tag: string) {
       clearTimeout(timeOutFunctionId);
       timeOutFunctionId = window.setTimeout(() => setCanvasSize({ element, canvas }), timeOutDuration);
     }, false);
-    return canvas.getContext('2d');
+    return {
+      element: element,
+      context: canvas.getContext('2d'),
+      width: canvas.width,
+      height: canvas.height,
+      grid: initGrid({ canvas, svgWidth: 75 }),
+    }
+  } else {
+    // this could fail hard, need to relook canvases that are not on the DOM
+    return {
+      element: null,
+      context: canvas.getContext('2d'),
+      width: canvas.width,
+      height: canvas.height,
+      grid: initGrid({ canvas, svgWidth: 1 }),
+    }
   }
+}
+
+function initGrid({ canvas, svgWidth }) {
+  const rows = Math.floor(canvas.height / svgWidth);
+  const coloumns = Math.floor(canvas.width / svgWidth);
+
+  return (new Array(rows).fill(0).map(() => new Array(coloumns).fill(0)));
 }
 
 function getCanvasDimensions(element: Element) {
