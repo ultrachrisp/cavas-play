@@ -1,8 +1,8 @@
 let timeOutFunctionId: number;
 const timeOutDuration: number = 250;
 
-export function createCanvas(selector: string) {
-  const element = document.querySelector(selector);
+export function createCanvas(tag: string) {
+  const element = document.querySelector(tag);
   if (element) {
     const canvas = document.createElement('canvas');
     element.innerHTML = '';
@@ -18,7 +18,7 @@ export function createCanvas(selector: string) {
 }
 
 function getCanvasDimensions(element: Element) {
-  const boundingRect: DOMRect = element.getBoundingClientRect();
+  const boundingRect = element.getBoundingClientRect();
   const canvasWidth = boundingRect.width;
   const possibleHeight = window.innerHeight - (boundingRect.top * 2);
   const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
