@@ -1,11 +1,11 @@
-let timeOutFunctionId: number;
-const timeOutDuration: number = 250;
+
 
 const imgWidth: number = 75;
 
 interface CanvasObject {
   element: Element | null;
   context: CanvasRenderingContext2D | null;
+  canvas: HTMLCanvasElement;
   width: number;
   height: number;
   grid: Array<Array<number>>;
@@ -21,11 +21,8 @@ export function createCanvas(tag: string): CanvasObject {
     element.appendChild(canvas);
     setCanvasSize({ element, canvas });
 
-    window.addEventListener('resize', () => {
-      clearTimeout(timeOutFunctionId);
-      timeOutFunctionId = window.setTimeout(() => setCanvasSize({ element, canvas }), timeOutDuration);
-    }, false);
     return {
+      canvas,
       element: element,
       context: canvas.getContext('2d'),
       width: canvas.width,
@@ -35,8 +32,9 @@ export function createCanvas(tag: string): CanvasObject {
       y: 0,
     }
   } else {
-    // this could fail hard, need to relook canvases that are not on the DOM
+    // need to relook canvases that are not on the DOM
     return {
+      canvas,
       element: null,
       context: canvas.getContext('2d'),
       width: canvas.width,
@@ -63,11 +61,12 @@ function getCanvasDimensions(element: Element) {
   return { canvasWidth, canvasHeight };
 }
 
-function setCanvasSize({ element, canvas }: { element: Element, canvas: HTMLCanvasElement }) {
+export function setCanvasSize({ element, canvas }: { element: Element, canvas: HTMLCanvasElement }) {
   const { canvasWidth, canvasHeight } = getCanvasDimensions(element);
 
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+
   return canvas;
 }
 
