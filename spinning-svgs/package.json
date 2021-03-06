@@ -3,8 +3,8 @@
     "description": "Canvas is an often overlooked feature in HTML5. Granted, it has it's downsides but it also has its strengths. I used this project to up-skill myself in the HTML canvas tag.",
     "main": "index.html",
     "scripts": {
-        "start": "webpack serve --open",
-        "build": "webpack",
+        "start": "webpack serve --open --config webpack.dev.js",
+        "build": "webpack --config webpack.prod.js",
         "test": "jest --watch --env=jsdom",
         "check-types": "tsc"
     },
@@ -27,6 +27,7 @@
         "typescript": "^4.0.2",
         "webpack": "^5.24.3",
         "webpack-cli": "^4.5.0",
-        "webpack-dev-server": "^3.11.2"
+        "webpack-dev-server": "^3.11.2",
+        "webpack-merge": "^5.7.3"
     }
 }
