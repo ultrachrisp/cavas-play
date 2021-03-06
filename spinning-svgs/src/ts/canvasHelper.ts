@@ -1,5 +1,3 @@
-
-
 const imgWidth: number = 75;
 
 interface CanvasObject {
