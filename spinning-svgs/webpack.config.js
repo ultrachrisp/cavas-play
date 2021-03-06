@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/ts/main.ts',
+  entry: './src/ts/index.ts',
   module: {
     rules: [
       {

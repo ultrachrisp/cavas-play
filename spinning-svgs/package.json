@@ -5,7 +5,8 @@
     "scripts": {
         "start": "webpack serve --open",
         "build": "webpack",
-        "test": "jest --watch --env=jsdom"
+        "test": "jest --watch --env=jsdom",
+        "check-types": "tsc"
     },
     "repository": {
         "type": "git",
