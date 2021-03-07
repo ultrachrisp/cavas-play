@@ -1,50 +1,28 @@
-const imgWidth: number = 75;
+import { CanvasObject, GeneralSettings } from "./types";
 
-interface CanvasObject {
-  element: Element | null;
-  context: CanvasRenderingContext2D | null;
-  canvas: HTMLCanvasElement;
-  width: number;
-  height: number;
-  grid: Array<Array<number>>;
-  x: number;
-  y: number;
-}
+const imgWidth: number = 75;
 
 export function createCanvas(tag: string): CanvasObject {
   const canvas = document.createElement('canvas');
-  const element = document.querySelector(tag);
-  if (element) {
-    element.innerHTML = '';
-    element.appendChild(canvas);
-    setCanvasSize({ element, canvas });
+  const element = document.querySelector(tag)!; // little ugly, but assuring TS we will find the element
 
-    return {
-      canvas,
-      element: element,
-      context: canvas.getContext('2d'),
-      width: canvas.width,
-      height: canvas.height,
-      grid: initGrid({ canvas, svgWidth: imgWidth }),
-      x: 0,
-      y: 0,
-    }
-  } else {
-    // need to relook canvases that are not on the DOM
-    return {
-      canvas,
-      element: null,
-      context: canvas.getContext('2d'),
-      width: canvas.width,
-      height: canvas.height,
-      grid: initGrid({ canvas, svgWidth: 1 }),
-      x: 0,
-      y: 0,
-    }
+  element.innerHTML = '';
+  element.appendChild(canvas);
+  setCanvasSize({ element, canvas });
+
+  return {
+    canvas,
+    element: element,
+    context: canvas.getContext('2d')!, // little ugly, but assuring TS we will find the element
+    width: canvas.width,
+    height: canvas.height,
+    grid: initGrid({ canvas, svgWidth: imgWidth }),
+    x: 0,
+    y: 0,
   }
 }
 
-function initGrid({ canvas, svgWidth }) {
+function initGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: number }) {
   const rows = Math.floor(canvas.height / svgWidth);
   const coloumns = Math.floor(canvas.width / svgWidth);
 
@@ -68,15 +46,22 @@ export function setCanvasSize({ element, canvas }: { element: Element, canvas: H
   return canvas;
 }
 
-export function loadSvg(settings, obj, i, j) {
+interface LoadSVG {
+  settings: GeneralSettings;
+  obj: CanvasObject;
+  x: number;
+  y: number;
+}
+
+export function loadSvg({ settings, obj, x, y }: LoadSVG) {
   const { svg, svgQuery, colours } = settings,
     result = svg.replace(svgQuery, colours[1]),
     uri = encodeURIComponent(result),
     img = new Image();
 
   img.onload = () => {
-    const xPos: number = i * imgWidth;
-    const yPos: number = j * imgWidth;
+    const xPos: number = x * imgWidth;
+    const yPos: number = y * imgWidth;
     obj.context.drawImage(img, xPos, yPos);
   };
   img.src = `data:image/svg+xml,${uri}`;
