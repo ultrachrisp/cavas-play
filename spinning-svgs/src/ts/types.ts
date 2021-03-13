@@ -18,3 +18,10 @@ export interface CanvasObject {
   xOffset: number;
   yOffset: number;
 }
+
+export interface LoadSVG {
+  settings: GeneralSettings;
+  obj: CanvasObject;
+  x: number;
+  y: number;
+}

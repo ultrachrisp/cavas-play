@@ -1,4 +1,4 @@
-import { CanvasObject, GeneralSettings } from "./types";
+import { CanvasObject, GeneralSettings, LoadSVG } from "./types";
 
 export function createCanvas(settings: GeneralSettings): CanvasObject {
   const canvas = document.createElement('canvas');
@@ -8,29 +8,28 @@ export function createCanvas(settings: GeneralSettings): CanvasObject {
   element.innerHTML = '';
   element.appendChild(canvas);
 
-  initCanvasSize({ canvas, element });
+  const { canvasWidth, canvasHeight } = initCanvasSize({ canvas, element });
   const grid = initGrid({ canvas, svgWidth });
 
-  const obj = {
+  return {
     canvas,
     element,
     context: canvas.getContext('2d')!, // little ugly, but assuring TS we will find the element
     grid,
-    width: canvas.width,
-    height: canvas.height,
+    width: canvasWidth,
+    height: canvasHeight,
     particleWidth: svgWidth,
     particleHeight: svgWidth,
     xOffset: 0,
     yOffset: 0,
   }
-
-  return obj;
 }
 
 function initCanvasSize({ canvas, element }: { canvas: HTMLCanvasElement, element: Element }) {
   const { canvasWidth, canvasHeight } = getCanvasDimensions(element);
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+  return { canvasWidth, canvasHeight };
 }
 
 function initGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: number }) {
@@ -38,15 +37,6 @@ function initGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: n
   const coloumns = Math.floor(canvas.width / svgWidth);
 
   return (new Array(coloumns).fill(0).map(() => new Array(rows).fill(0)));
-}
-
-function getCanvasDimensions(element: Element) {
-  const boundingRect = element.getBoundingClientRect();
-  const canvasWidth = boundingRect.width;
-  // const possibleHeight = window.innerHeight - (boundingRect.top * 2);
-  // const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
-  const canvasHeight = window.innerHeight - (boundingRect.top * 2);
-  return { canvasWidth, canvasHeight };
 }
 
 export function setCanvasSize(obj: CanvasObject) {
@@ -57,23 +47,27 @@ export function setCanvasSize(obj: CanvasObject) {
   obj.xOffset = Math.floor(obj.width % obj.particleWidth) / 2;
   obj.yOffset = Math.floor(obj.height % obj.particleHeight) / 2;
 
-  obj.grid = setGrid(obj);
+  obj.grid = resetGrid(obj);
 }
 
-function setGrid(obj: CanvasObject) {
+function resetGrid(obj: CanvasObject) {
   const rows = Math.floor(obj.height / obj.particleHeight);
   const columns = Math.floor(obj.width / obj.particleWidth);
 
   return (new Array(columns).fill(0).map(() => new Array(rows).fill(0)));
 }
 
-interface LoadSVG {
-  settings: GeneralSettings;
-  obj: CanvasObject;
-  x: number;
-  y: number;
-}
+function getCanvasDimensions(element: Element) {
+  const boundingRect = element.getBoundingClientRect();
+  const canvasWidth = boundingRect.width;
+  const canvasHeight = window.innerHeight - (boundingRect.top * 2);
 
+  /** Usful to keep a square shape*/
+  // const possibleHeight = window.innerHeight - (boundingRect.top * 2);
+  // const canvasHeight = (canvasWidth > possibleHeight) ? possibleHeight : canvasWidth;
+
+  return { canvasWidth, canvasHeight };
+}
 
 export function loadSvg({ settings, obj, x, y }: LoadSVG) {
   const { svg, svgQuery, colours } = settings,
