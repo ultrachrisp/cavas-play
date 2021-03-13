@@ -10,9 +10,11 @@ export interface CanvasObject {
   element: Element;
   context: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
+  grid: Array<Array<number>>;
   width: number;
   height: number;
-  grid: Array<Array<number>>;
-  x: number;
-  y: number;
+  particleWidth: number;
+  particleHeight: number;
+  xOffset: number;
+  yOffset: number;
 }

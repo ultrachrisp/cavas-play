@@ -19,11 +19,11 @@ const settings: GeneralSettings = {
 
 function onResize(obj: CanvasObject) {
 
-  setCanvasSize({ obj, width: settings.svgWidth });
+  setCanvasSize(obj);
 
   obj.grid.forEach((row, x) => {
     row.forEach((_, y) => {
-      loadSvg({ settings, obj: obj, x, y });
+      loadSvg({ settings, obj, x, y });
     })
   })
 }
