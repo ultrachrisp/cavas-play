@@ -1,25 +1,27 @@
 import { CanvasObject, GeneralSettings } from "./types";
 
-const imgWidth: number = 75;
-
-export function createCanvas(tag: string): CanvasObject {
+export function createCanvas(settings: GeneralSettings): CanvasObject {
   const canvas = document.createElement('canvas');
-  const element = document.querySelector(tag)!; // little ugly, but assuring TS we will find the element
+  const element = document.querySelector(settings.tag)!; // little ugly, but assuring TS we will find the element
 
   element.innerHTML = '';
   element.appendChild(canvas);
-  setCanvasSize({ element, canvas });
 
-  return {
+  initCanvasSize({ canvas, element });
+  const grid = initGrid({ canvas, svgWidth: settings.svgWidth });
+
+  const obj = {
     canvas,
-    element: element,
+    element,
     context: canvas.getContext('2d')!, // little ugly, but assuring TS we will find the element
     width: canvas.width,
     height: canvas.height,
-    grid: initGrid({ canvas, svgWidth: imgWidth }),
+    grid,
     x: 0,
     y: 0,
   }
+
+  return obj;
 }
 
 function initGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: number }) {
@@ -37,13 +39,26 @@ function getCanvasDimensions(element: Element) {
   return { canvasWidth, canvasHeight };
 }
 
-export function setCanvasSize({ element, canvas }: { element: Element, canvas: HTMLCanvasElement }) {
+function initCanvasSize({ canvas, element }: { canvas: HTMLCanvasElement, element: Element }) {
   const { canvasWidth, canvasHeight } = getCanvasDimensions(element);
-
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+}
 
-  return canvas;
+export function setCanvasSize({ obj, width }: { obj: CanvasObject, width: number }) {
+  const { canvasWidth, canvasHeight } = getCanvasDimensions(obj.element);
+
+  obj.width = obj.canvas.width = canvasWidth;
+  obj.height = obj.canvas.height = canvasHeight;
+
+  obj.grid = setGrid({ canvas: obj.canvas, svgWidth: width });
+}
+
+function setGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: number }) {
+  const rows = Math.floor(canvas.height / svgWidth);
+  const coloumns = Math.floor(canvas.width / svgWidth);
+
+  return (new Array(coloumns).fill(0).map(() => new Array(rows).fill(0)));
 }
 
 interface LoadSVG {
@@ -53,6 +68,7 @@ interface LoadSVG {
   y: number;
 }
 
+
 export function loadSvg({ settings, obj, x, y }: LoadSVG) {
   const { svg, svgQuery, colours } = settings,
     result = svg.replace(svgQuery, colours[1]),
@@ -60,8 +76,8 @@ export function loadSvg({ settings, obj, x, y }: LoadSVG) {
     img = new Image();
 
   img.onload = () => {
-    const xPos: number = x * imgWidth;
-    const yPos: number = y * imgWidth;
+    const xPos: number = x * settings.svgWidth;
+    const yPos: number = y * settings.svgWidth;
     obj.context.drawImage(img, xPos, yPos);
   };
   img.src = `data:image/svg+xml,${uri}`;
