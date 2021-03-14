@@ -9,7 +9,7 @@ export function createCanvas(settings: GeneralSettings): CanvasObject {
   element.appendChild(canvas);
 
   const { canvasWidth, canvasHeight } = initCanvasSize({ canvas, element });
-  const grid = initGrid({ canvas, svgWidth });
+  const grid = setGrid({ canvasWidth, canvasHeight, particleWidth: svgWidth, particleHeight: svgWidth });
 
   return {
     canvas,
@@ -32,13 +32,6 @@ function initCanvasSize({ canvas, element }: { canvas: HTMLCanvasElement, elemen
   return { canvasWidth, canvasHeight };
 }
 
-function initGrid({ canvas, svgWidth }: { canvas: HTMLCanvasElement, svgWidth: number }) {
-  const rows = Math.floor(canvas.height / svgWidth);
-  const coloumns = Math.floor(canvas.width / svgWidth);
-
-  return (new Array(coloumns).fill(0).map(() => new Array(rows).fill(0)));
-}
-
 export function setCanvasSize(obj: CanvasObject) {
   const { canvasWidth, canvasHeight } = getCanvasDimensions(obj.element);
 
@@ -47,14 +40,15 @@ export function setCanvasSize(obj: CanvasObject) {
   obj.xOffset = Math.floor(obj.width % obj.particleWidth) / 2;
   obj.yOffset = Math.floor(obj.height % obj.particleHeight) / 2;
 
-  obj.grid = resetGrid(obj);
+  obj.grid = setGrid({ canvasWidth, canvasHeight, particleWidth: obj.particleWidth, particleHeight: obj.particleHeight });
+
 }
 
-function resetGrid(obj: CanvasObject) {
-  const rows = Math.floor(obj.height / obj.particleHeight);
-  const columns = Math.floor(obj.width / obj.particleWidth);
+function setGrid({ canvasWidth, canvasHeight, particleWidth, particleHeight }: { canvasWidth: number, canvasHeight: number, particleWidth: number, particleHeight: number }): Array<Array<number>> {
+  const rows = Math.floor(canvasHeight / particleHeight);
+  const coloumns = Math.floor(canvasWidth / particleWidth);
 
-  return (new Array(columns).fill(0).map(() => new Array(rows).fill(0)));
+  return (new Array(coloumns).fill(0).map(() => new Array(rows).fill(0)));
 }
 
 function getCanvasDimensions(element: Element) {

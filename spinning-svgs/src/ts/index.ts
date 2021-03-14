@@ -28,7 +28,6 @@ function onResize(obj: CanvasObject) {
   })
 }
 
-
 function init() {
   const obj = createCanvas(settings);
   onResize(obj);
